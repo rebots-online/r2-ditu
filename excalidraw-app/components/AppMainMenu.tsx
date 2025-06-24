@@ -2,8 +2,11 @@ import {
   loginIcon,
   ExcalLogo,
   eyeIcon,
+  MagicIcon,
 } from "@excalidraw/excalidraw/components/icons";
 import { MainMenu } from "@excalidraw/excalidraw/index";
+import { useAtom } from "jotai";
+import { llmAssistantPanelOpenAtom } from "./LLMAssistantPanel";
 import React from "react";
 
 import { isDevEnv } from "@excalidraw/common";
@@ -23,6 +26,7 @@ export const AppMainMenu: React.FC<{
   setTheme: (theme: Theme | "system") => void;
   refresh: () => void;
 }> = React.memo((props) => {
+  const [, setLLMAssistantPanelOpen] = useAtom(llmAssistantPanelOpenAtom);
   return (
     <MainMenu>
       <MainMenu.DefaultItems.LoadScene />
@@ -37,6 +41,13 @@ export const AppMainMenu: React.FC<{
       )}
       <MainMenu.DefaultItems.CommandPalette className="highlighted" />
       <MainMenu.DefaultItems.SearchMenu />
+      <MainMenu.Item
+        icon={MagicIcon}
+        onSelect={() => setLLMAssistantPanelOpen((isOpen) => !isOpen)}
+        dataTestId="llm-assistant-open"
+      >
+        AI Assistant
+      </MainMenu.Item>
       <MainMenu.DefaultItems.Help />
       <MainMenu.DefaultItems.ClearCanvas />
       <MainMenu.Separator />

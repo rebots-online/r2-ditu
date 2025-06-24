@@ -73,6 +73,7 @@ The Excalidraw editor (npm package) supports:
 - ➡️&nbsp;Arrow-binding & labeled arrows.
 - 🔙&nbsp;Undo / Redo.
 - 🔍&nbsp;Zoom and panning support.
+- 🤖&nbsp;AI Assistant for brainstorming (New!).
 
 ## Excalidraw.com
 
@@ -85,6 +86,16 @@ The app hosted at [excalidraw.com](https://excalidraw.com) is a minimal showcase
 - 🔗&nbsp;Shareable links (export to a readonly link you can share with others).
 
 We'll be adding these features as drop-in plugins for the npm package in the future.
+
+### New: AI Assistant for Brainstorming
+
+Excalidraw now includes an AI Assistant to help you brainstorm ideas, generate diagrams from text, and get suggestions for your drawings. Access it via the "AI Assistant" option in the main menu. This feature allows you to:
+
+-   **Generate diagrams:** Describe what you want to draw, and the AI will attempt to create it.
+-   **Get suggestions:** Select elements on your canvas and ask the AI for improvements or related ideas.
+-   **Collaborate with AI:** Work alongside the AI agent in real-time collaborative sessions.
+
+This feature requires a backend service. For local development, ensure the AI backend is running (see development documentation for details).
 
 ## Quick start
 
