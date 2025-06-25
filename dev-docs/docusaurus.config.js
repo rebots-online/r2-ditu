@@ -8,16 +8,16 @@ process.env.IS_PREACT = "false";
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Excalidraw developer docs",
+  title: "R2 Ditu developer docs",
   tagline:
-    "For Excalidraw contributors or those integrating the Excalidraw editor",
-  url: "https://docs.excalidraw.com",
+    "For R2 Ditu contributors or those integrating the R2 Ditu editor",
+  url: "https://docs.r2-ditou.robinsai.world",
   baseUrl: "/",
   onBrokenLinks: "throw",
   onBrokenMarkdownLinks: "warn",
   favicon: "img/favicon.png",
-  organizationName: "Excalidraw", // Usually your GitHub org/user name.
-  projectName: "excalidraw", // Usually your repo name.
+  organizationName: "rebots-online", // Usually your GitHub org/user name.
+  projectName: "r2-ditu", // Usually your repo name.
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want
@@ -54,9 +54,9 @@ const config = {
         respectPrefersColorScheme: true,
       },
       navbar: {
-        title: "Excalidraw",
+        title: "R2 Ditu",
         logo: {
-          alt: "Excalidraw Logo",
+          alt: "R2 Ditu Logo",
           src: "img/logo.svg",
         },
         items: [
@@ -66,7 +66,7 @@ const config = {
             label: "Docs",
           },
           {
-            to: "https://plus.excalidraw.com/blog",
+            to: "https://blog.r2-ditou.robinsai.world",
             label: "Blog",
             position: "left",
           },
@@ -111,7 +111,7 @@ const config = {
             items: [
               {
                 label: "Blog",
-                to: "https://plus.excalidraw.com/blog",
+                to: "https://blog.r2-ditou.robinsai.world",
               },
               {
                 label: "GitHub",

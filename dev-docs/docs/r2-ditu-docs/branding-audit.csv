@@ -1,0 +1,66 @@
+Category,File Path,Line/Setting,Current Value,Branding Element,Action Required,New Value,External Dependencies
+Domain,./public/robots.txt,Sitemap,https://excalidraw.com/sitemap.xml,Domain reference,Replace domain,https://r2-ditou.robinsai.world/sitemap.xml,DNS setup required
+Domain,./excalidraw-app/sentry.ts,Production host,excalidraw.com,Domain reference,Replace domain,r2-ditou.robinsai.world,Sentry configuration update
+Domain,./excalidraw-app/sentry.ts,Staging host,staging.excalidraw.com,Domain reference,Replace domain,staging.r2-ditou.robinsai.world,DNS setup for staging
+Domain,./excalidraw-app/components/EncryptedIcon.tsx,Blog link,https://plus.excalidraw.com/blog/end-to-end-encryption,Domain reference,Replace domain,https://blog.r2-ditou.robinsai.world/end-to-end-encryption,Blog setup required
+Domain,./excalidraw-app/index.html,Meta image,https://excalidraw.com/og-image-3.png,Domain reference,Replace domain,https://r2-ditou.robinsai.world/og-image-3.png,CDN/hosting setup
+Domain,./excalidraw-app/index.html,OG URL,https://excalidraw.com,Domain reference,Replace domain,https://r2-ditou.robinsai.world,DNS setup required
+Domain,./excalidraw-app/index.html,OG Image,https://excalidraw.com/og-image-3.png,Domain reference,Replace domain,https://r2-ditou.robinsai.world/og-image-3.png,CDN/hosting setup
+Domain,./excalidraw-app/index.html,Twitter URL,https://excalidraw.com,Domain reference,Replace domain,https://r2-ditou.robinsai.world,DNS setup required
+Domain,./excalidraw-app/index.html,Twitter Image,https://excalidraw.com/og-image-3.png,Domain reference,Replace domain,https://r2-ditou.robinsai.world/og-image-3.png,CDN/hosting setup
+Domain,./excalidraw-app/index.html,Canonical URL,https://excalidraw.com,Domain reference,Replace domain,https://r2-ditou.robinsai.world,DNS setup required
+Domain,./excalidraw-app/index.html,Redirect URL,https://app.excalidraw.com,Domain reference,Replace domain,https://app.r2-ditou.robinsai.world,DNS setup for app subdomain
+Domain,./vercel.json,Header value,https://excalidraw.com,Domain reference,Replace domain,https://r2-ditou.robinsai.world,Vercel configuration
+Domain,./vercel.json,Redirect destination,https://for-webex.excalidraw.com,Domain reference,Replace domain,https://for-webex.r2-ditou.robinsai.world,DNS setup for webex subdomain
+Domain,./vercel.json,Header value,vscode.excalidraw.com,Domain reference,Replace domain,vscode.r2-ditou.robinsai.world,DNS setup for vscode subdomain
+Domain,./dev-docs/docusaurus.config.js,Site URL,https://docs.excalidraw.com,Domain reference,Replace domain,https://docs.r2-ditou.robinsai.world,DNS setup for docs subdomain
+Domain,./dev-docs/docusaurus.config.js,Blog link,https://plus.excalidraw.com/blog,Domain reference,Replace domain,https://blog.r2-ditou.robinsai.world,DNS setup for blog subdomain
+Logo,./public/favicon.ico,Favicon,Current Excalidraw favicon,Brand logo,Replace with R2 Ditu favicon,New R2 Ditu favicon,Design new favicon
+Logo,./public/favicon.svg,Favicon SVG,Current Excalidraw favicon,Brand logo,Replace with R2 Ditu favicon,New R2 Ditu favicon SVG,Design new favicon
+Logo,./public/favicon-16x16.png,Favicon 16x16,Current Excalidraw favicon,Brand logo,Replace with R2 Ditu favicon,New R2 Ditu favicon 16x16,Design new favicon
+Logo,./public/favicon-32x32.png,Favicon 32x32,Current Excalidraw favicon,Brand logo,Replace with R2 Ditu favicon,New R2 Ditu favicon 32x32,Design new favicon
+Logo,./public/apple-touch-icon.png,Apple touch icon,Current Excalidraw icon,Brand logo,Replace with R2 Ditu icon,New R2 Ditu apple touch icon,Design new icon
+Logo,./public/maskable_icon_x192.png,Maskable icon 192,Current Excalidraw icon,Brand logo,Replace with R2 Ditu icon,New R2 Ditu maskable icon 192,Design new icon
+Logo,./public/maskable_icon_x512.png,Maskable icon 512,Current Excalidraw icon,Brand logo,Replace with R2 Ditu icon,New R2 Ditu maskable icon 512,Design new icon
+Logo,./public/og-image-3.png,Open Graph image,Current Excalidraw OG image,Brand image,Replace with R2 Ditu OG image,New R2 Ditu OG image,Design new OG image
+Logo,./dev-docs/static/img/logo.svg,Documentation logo,Current Excalidraw logo,Brand logo,Replace with R2 Ditu logo,New R2 Ditu logo SVG,Design new logo
+Logo,./dev-docs/static/img/favicon.ico,Docs favicon,Current Excalidraw favicon,Brand logo,Replace with R2 Ditu favicon,New R2 Ditu favicon,Design new favicon
+Logo,./dev-docs/static/img/favicon.png,Docs favicon PNG,Current Excalidraw favicon,Brand logo,Replace with R2 Ditu favicon,New R2 Ditu favicon PNG,Design new favicon
+Logo,./dev-docs/static/img/og-image.png,Docs OG image,Current Excalidraw OG image,Brand image,Replace with R2 Ditu OG image,New R2 Ditu docs OG image,Design new OG image
+Logo,./dev-docs/static/img/og-image-2.png,Docs OG image 2,Current Excalidraw OG image,Brand image,Replace with R2 Ditu OG image,New R2 Ditu docs OG image 2,Design new OG image
+Logo,./examples/with-nextjs/src/app/favicon.ico,NextJS example favicon,Current Excalidraw favicon,Brand logo,Replace with R2 Ditu favicon,New R2 Ditu favicon,Design new favicon
+Package,./package.json,@excalidraw/eslint-config,@excalidraw/eslint-config,Package name,Update package reference,@r2-ditu/eslint-config,Publish new package
+Package,./package.json,@excalidraw/prettier-config,@excalidraw/prettier-config,Package name,Update package reference,@r2-ditu/prettier-config,Publish new package
+Package,./excalidraw-app/package.json,@excalidraw/random-username,@excalidraw/random-username,Package name,Update package reference,@r2-ditu/random-username,Publish new package
+Package,./tsconfig.json,@excalidraw/common,@excalidraw/common,Package alias,Update package alias,@r2-ditu/common,Update build configuration
+Package,./tsconfig.json,@excalidraw/excalidraw,@excalidraw/excalidraw,Package alias,Update package alias,@r2-ditu/r2-ditu,Update build configuration
+Title,./excalidraw-app/index.html,Page title,Excalidraw | Hand-drawn look & feel • Collaborative • Secure,Brand name,Update title,R2 Ditu | Hand-drawn look & feel • Collaborative • Secure,None
+Meta,./excalidraw-app/index.html,Meta title,Excalidraw — Collaborative whiteboarding made easy,Brand name,Update meta title,R2 Ditu — Collaborative whiteboarding made easy,None
+Meta,./excalidraw-app/index.html,Meta description,Excalidraw is a virtual collaborative whiteboard tool,Brand name,Update description,R2 Ditu is a virtual collaborative whiteboard tool,None
+Meta,./excalidraw-app/index.html,OG site name,Excalidraw,Brand name,Update site name,R2 Ditu,None
+Meta,./excalidraw-app/index.html,OG title,Excalidraw — Collaborative whiteboarding made easy,Brand name,Update OG title,R2 Ditu — Collaborative whiteboarding made easy,None
+Meta,./excalidraw-app/index.html,OG image alt,Excalidraw logo,Brand name,Update alt text,R2 Ditu logo,None
+Meta,./excalidraw-app/index.html,OG description,Excalidraw is a virtual collaborative whiteboard tool,Brand name,Update OG description,R2 Ditu is a virtual collaborative whiteboard tool,None
+Meta,./excalidraw-app/index.html,Twitter site,@excalidraw,Social handle,Update Twitter handle,@r2ditu,Create Twitter account
+Meta,./excalidraw-app/index.html,Twitter title,Excalidraw — Collaborative whiteboarding made easy,Brand name,Update Twitter title,R2 Ditu — Collaborative whiteboarding made easy,None
+Meta,./excalidraw-app/index.html,Twitter description,Excalidraw is a virtual collaborative whiteboard tool,Brand name,Update Twitter description,R2 Ditu is a virtual collaborative whiteboard tool,None
+Package,./excalidraw-app/package.json,Package name,excalidraw-app,Package name,Update package name,r2-ditu-app,Update npm package
+Package,./package.json,Monorepo name,excalidraw-monorepo,Package name,Update monorepo name,r2-ditu-monorepo,Update npm package
+Package,./packages/utils/package.json,Utils package,@excalidraw/utils,Package name,Update package name,@r2-ditu/utils,Publish new package
+Package,./packages/excalidraw/package.json,Main package,@excalidraw/excalidraw,Package name,Update package name,@r2-ditu/r2-ditu,Publish new package
+Package,./packages/math/package.json,Math package,@excalidraw/math,Package name,Update package name,@r2-ditu/math,Publish new package
+Package,./packages/common/package.json,Common package,@excalidraw/common,Package name,Update package name,@r2-ditu/common,Publish new package
+Package,./packages/element/package.json,Element package,@excalidraw/element,Package name,Update package name,@r2-ditu/element,Publish new package
+Constant,./packages/common/src/constants.ts,APP_NAME,Excalidraw,App name constant,Update app name,R2 Ditu,None
+Config,./dev-docs/docusaurus.config.js,Site title,Excalidraw developer docs,Brand name,Update title,R2 Ditu developer docs,None
+Config,./dev-docs/docusaurus.config.js,Tagline,For Excalidraw contributors or those integrating the Excalidraw editor,Brand name,Update tagline,For R2 Ditu contributors or those integrating the R2 Ditu editor,None
+Config,./dev-docs/docusaurus.config.js,Organization name,Excalidraw,Brand name,Update organization,R2 Ditu,None
+Config,./dev-docs/docusaurus.config.js,Project name,excalidraw,Brand name,Update project name,r2-ditu,None
+Config,./dev-docs/docusaurus.config.js,Navbar title,Excalidraw,Brand name,Update navbar title,R2 Ditu,None
+Config,./dev-docs/docusaurus.config.js,Algolia index,excalidraw,Search index,Update search index,r2-ditu,Configure Algolia search
+Directory,./excalidraw-app/,App directory,excalidraw-app,Directory name,Rename directory,r2-ditu-app,Update build scripts
+Directory,./packages/excalidraw/,Package directory,excalidraw,Directory name,Rename directory,r2-ditu,Update build scripts
+CSS,./packages/excalidraw/components/App.tsx,CSS classes,excalidraw excalidraw-container,CSS class names,Update class names,r2-ditu r2-ditu-container,Update CSS files
+CSS,./packages/excalidraw/components/App.tsx,CSS classes,excalidraw-textEditorContainer,CSS class names,Update class names,r2-ditu-textEditorContainer,Update CSS files
+CSS,./packages/excalidraw/components/App.tsx,CSS classes,excalidraw-contextMenuContainer,CSS class names,Update class names,r2-ditu-contextMenuContainer,Update CSS files
+CSS,./packages/excalidraw/components/App.tsx,CSS classes,excalidraw-eye-dropper-container,CSS class names,Update class names,r2-ditu-eye-dropper-container,Update CSS files
