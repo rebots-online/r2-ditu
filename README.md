@@ -1,63 +1,38 @@
-<a href="https://excalidraw.com/" target="_blank" rel="noopener">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" alt="Excalidraw" srcset="https://excalidraw.nyc3.cdn.digitaloceanspaces.com/github/excalidraw_github_cover_2_dark.png" />
-    <img alt="Excalidraw" src="https://excalidraw.nyc3.cdn.digitaloceanspaces.com/github/excalidraw_github_cover_2.png" />
-  </picture>
-</a>
+# R2 Ditu
 
-<h4 align="center">
-  <a href="https://excalidraw.com">Excalidraw Editor</a> |
-  <a href="https://plus.excalidraw.com/blog">Blog</a> |
-  <a href="https://docs.excalidraw.com">Documentation</a> |
-  <a href="https://plus.excalidraw.com">Excalidraw+</a>
-</h4>
+<!-- TODO: Add your logo/banner image here -->
+<!-- ![R2 Ditu Banner](./public/banner.png) -->
 
 <div align="center">
-  <h2>
-    An open source virtual hand-drawn style whiteboard. </br>
-    Collaborative and end-to-end encrypted. </br>
-  <br />
-  </h2>
+
+<!-- TODO: Update navigation links for your project -->
+#### [Live App](#) | [Documentation](#) | [Blog](#)
+
+## An open source virtual hand-drawn style whiteboard.<br/>Collaborative and end-to-end encrypted.
+
 </div>
 
-<br />
-<p align="center">
-  <a href="https://github.com/excalidraw/excalidraw/blob/master/LICENSE">
-    <img alt="Excalidraw is released under the MIT license." src="https://img.shields.io/badge/license-MIT-blue.svg"  />
-  </a>
-  <a href="https://www.npmjs.com/package/@excalidraw/excalidraw">
-    <img alt="npm downloads/month" src="https://img.shields.io/npm/dm/@excalidraw/excalidraw"  />
-  </a>
-  <a href="https://docs.excalidraw.com/docs/introduction/contributing">
-    <img alt="PRs welcome!" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat"  />
-  </a>
-  <a href="https://discord.gg/UexuTaE">
-    <img alt="Chat on Discord" src="https://img.shields.io/discord/723672430744174682?color=738ad6&label=Chat%20on%20Discord&logo=discord&logoColor=ffffff&widge=false"/>
-  </a>
-  <a href="https://deepwiki.com/excalidraw/excalidraw">
-    <img alt="Ask DeepWiki" src="https://deepwiki.com/badge.svg" />
-  </a>
-  <a href="https://twitter.com/excalidraw">
-    <img alt="Follow Excalidraw on Twitter" src="https://img.shields.io/twitter/follow/excalidraw.svg?label=follow+@excalidraw&style=social&logo=twitter"/>
-  </a>
-</p>
+<div align="center">
+
+<!-- TODO: Update badges with your project information -->
+[![License](https://img.shields.io/badge/license-TBD-blue.svg)](./LICENSE)
+[![PRs welcome!](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](#contributing)
+<!-- Add your own badges here -->
+
+</div>
 
 <div align="center">
-  <figure>
-    <a href="https://excalidraw.com" target="_blank" rel="noopener">
-      <img src="https://excalidraw.nyc3.cdn.digitaloceanspaces.com/github%2Fproduct_showcase.png" alt="Product showcase" />
-    </a>
-    <figcaption>
-      <p align="center">
-        Create beautiful hand-drawn like diagrams, wireframes, or whatever you like.
-      </p>
-    </figcaption>
-  </figure>
+
+<!-- TODO: Add your product showcase image -->
+<!-- ![Product showcase](./public/screenshots/showcase.png) -->
+
+*Create beautiful hand-drawn like diagrams, wireframes, or whatever you like.*
+
 </div>
 
 ## Features
 
-The Excalidraw editor (npm package) supports:
+The R2 Ditu editor supports:
 
 - 💯&nbsp;Free & open-source.
 - 🎨&nbsp;Infinite, canvas-based whiteboard.
@@ -75,9 +50,10 @@ The Excalidraw editor (npm package) supports:
 - 🔍&nbsp;Zoom and panning support.
 - 🤖&nbsp;AI Assistant for brainstorming (New!).
 
-## Excalidraw.com
+## R2 Ditu App
 
-The app hosted at [excalidraw.com](https://excalidraw.com) is a minimal showcase of what you can build with Excalidraw. Its [source code](https://github.com/excalidraw/excalidraw/tree/master/excalidraw-app) is part of this repository as well, and the app features:
+<!-- TODO: Update with your hosted app URL -->
+The hosted R2 Ditu app showcases the full capabilities of the whiteboard editor. The app's [source code](./excalidraw-app) is part of this repository and features:
 
 - 📡&nbsp;PWA support (works offline).
 - 🤼&nbsp;Real-time collaboration.
@@ -87,9 +63,9 @@ The app hosted at [excalidraw.com](https://excalidraw.com) is a minimal showcase
 
 We'll be adding these features as drop-in plugins for the npm package in the future.
 
-### New: AI Assistant for Brainstorming
+### AI Assistant for Brainstorming
 
-Excalidraw now includes an AI Assistant to help you brainstorm ideas, generate diagrams from text, and get suggestions for your drawings. Access it via the "AI Assistant" option in the main menu. This feature allows you to:
+R2 Ditu includes an AI Assistant to help you brainstorm ideas, generate diagrams from text, and get suggestions for your drawings. Access it via the "AI Assistant" option in the main menu. This feature allows you to:
 
 -   **Generate diagrams:** Describe what you want to draw, and the AI will attempt to create it.
 -   **Get suggestions:** Select elements on your canvas and ask the AI for improvements or related ideas.
@@ -97,45 +73,51 @@ Excalidraw now includes an AI Assistant to help you brainstorm ideas, generate d
 
 This feature requires a backend service. For local development, ensure the AI backend is running (see development documentation for details).
 
-## Quick start
+## Quick Start
 
-**Note:** following instructions are for installing the Excalidraw [npm package](https://www.npmjs.com/package/@excalidraw/excalidraw) when integrating Excalidraw into your own app. To run the repository locally for development, please refer to our [Development Guide](https://docs.excalidraw.com/docs/introduction/development).
-
-Use `npm` or `yarn` to install the package.
+<!-- TODO: Update package name and npm registry when published -->
+**Note:** The following instructions are for integrating R2 Ditu into your own app. To run the repository locally for development, please refer to the [Development Guide](./dev-docs/README.md).
 
 ```bash
-npm install react react-dom @excalidraw/excalidraw
+# TODO: Update with actual package name when published
+npm install react react-dom @r2-ditu/r2-ditu
 # or
-yarn add react react-dom @excalidraw/excalidraw
+yarn add react react-dom @r2-ditu/r2-ditu
 ```
 
-Check out our [documentation](https://docs.excalidraw.com/docs/@excalidraw/excalidraw/installation) for more details!
+<!-- TODO: Add link to documentation when available -->
+Check out our documentation for more details!
 
 ## Contributing
 
-- Missing something or found a bug? [Report here](https://github.com/excalidraw/excalidraw/issues).
-- Want to contribute? Check out our [contribution guide](https://docs.excalidraw.com/docs/introduction/contributing) or let us know on [Discord](https://discord.gg/UexuTaE).
-- Want to help with translations? See the [translation guide](https://docs.excalidraw.com/docs/introduction/contributing#translating).
+<!-- TODO: Update repository URL -->
+- Missing something or found a bug? [Report here](https://github.com/rebots-online/r2-ditu/issues).
+- Want to contribute? See our [CONTRIBUTING.md](./CONTRIBUTING.md) file for guidelines.
+<!-- TODO: Add Discord/community links when available -->
+<!-- - Want to help with translations? See the translation guide. -->
 
 ## Integrations
 
-- [VScode extension](https://marketplace.visualstudio.com/items?itemName=pomdtr.excalidraw-editor)
-- [npm package](https://www.npmjs.com/package/@excalidraw/excalidraw)
+<!-- TODO: Add your own integrations when available -->
+<!-- - VSCode extension -->
+<!-- - npm package -->
 
-## Who's integrating Excalidraw
+## Development
 
-[Google Cloud](https://googlecloudcheatsheet.withgoogle.com/architecture) • [Meta](https://meta.com/) • [CodeSandbox](https://codesandbox.io/) • [Obsidian Excalidraw](https://github.com/zsviczian/obsidian-excalidraw-plugin) • [Replit](https://replit.com/) • [Slite](https://slite.com/) • [Notion](https://notion.so/) • [HackerRank](https://www.hackerrank.com/) • and many others
+To run R2 Ditu locally for development:
 
-## Sponsors & support
+1. Clone this repository
+2. Install dependencies: `yarn install`
+3. Start the development server: `yarn start`
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
 
-If you like the project, you can become a sponsor at [Open Collective](https://opencollective.com/excalidraw) or use [Excalidraw+](https://plus.excalidraw.com/).
+For more detailed development instructions, see the [Development Guide](./dev-docs/README.md).
 
-## Thank you for supporting Excalidraw
+## License
 
-[<img src="https://opencollective.com/excalidraw/tiers/sponsors/0/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/0/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/1/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/1/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/2/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/2/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/3/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/3/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/4/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/4/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/5/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/5/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/6/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/6/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/7/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/7/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/8/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/8/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/9/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/9/website) [<img src="https://opencollective.com/excalidraw/tiers/sponsors/10/avatar.svg?avatarHeight=120"/>](https://opencollective.com/excalidraw/tiers/sponsors/10/website)
+<!-- TODO: Update license information -->
+This project's license is to be determined. See [LICENSE](./LICENSE) file for details.
 
-<a href="https://opencollective.com/excalidraw#category-CONTRIBUTE" target="_blank"><img src="https://opencollective.com/excalidraw/tiers/backers.svg?avatarHeight=32"/></a>
+## Acknowledgments
 
-Last but not least, we're thankful to these companies for offering their services for free:
-
-[![Vercel](./.github/assets/vercel.svg)](https://vercel.com) [![Sentry](./.github/assets/sentry.svg)](https://sentry.io) [![Crowdin](./.github/assets/crowdin.svg)](https://crowdin.com)
+This project is based on [Excalidraw](https://github.com/excalidraw/excalidraw), an excellent open-source whiteboard tool.
