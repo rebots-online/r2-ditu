@@ -3,6 +3,8 @@
 // import { useAtom } from "jotai";
 // import { ExcalidrawImperativeAPI } from "@excalidraw/excalidraw/types";
 // import { LLMAssistantPanel, llmAssistantPanelOpenAtom, llmChatHistoryAtom, llmIsLoadingAtom } from "./LLMAssistantPanel";
+
+export {}; // Make this a module
 // import * as api from '../llm/api'; // To mock fetchLLMAssistantResponse
 
 // // Mock Jotai atoms

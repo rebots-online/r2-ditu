@@ -44,7 +44,7 @@ export const AppMainMenu: React.FC<{
       <MainMenu.Item
         icon={MagicIcon}
         onSelect={() => setLLMAssistantPanelOpen((isOpen) => !isOpen)}
-        dataTestId="llm-assistant-open"
+        data-testid="llm-assistant-open"
       >
         AI Assistant
       </MainMenu.Item>
