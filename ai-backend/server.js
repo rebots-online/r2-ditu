@@ -1,10 +1,26 @@
 const express = require('express');
 const cors = require('cors');
 const OpenAI = require('openai');
+const WebSocket = require('ws');
+const http = require('http');
 require('dotenv').config();
 
+// Import new multi-model system
+const ModelAdapter = require('./lib/model-adapter');
+const MCPClient = require('./lib/mcp-client');
+const { AgentOrchestrator } = require('./lib/agent-orchestrator');
+
 const app = express();
+const server = http.createServer(app);
 const port = process.env.PORT || 3015;
+
+// Initialize multi-model system
+const modelAdapter = new ModelAdapter();
+const mcpClient = new MCPClient({ 
+  wsUrl: 'ws://localhost:12000/ws',
+  modelAdapter 
+});
+const orchestrator = new AgentOrchestrator(modelAdapter, mcpClient);
 
 // Middleware
 app.use(cors());
@@ -17,13 +33,22 @@ const openai = new OpenAI({
 
 // Health check endpoint
 app.get('/health', (req, res) => {
-  res.json({ status: 'ok', service: 'R2 Ditu AI Backend' });
+  res.json({ 
+    status: 'ok', 
+    service: 'R2 Ditu AI Backend',
+    features: {
+      multi_model: true,
+      mcp_client: mcpClient.isConnected,
+      orchestrator: true,
+      local_models: true
+    }
+  });
 });
 
-// Main AI brainstorming endpoint
+// Main AI brainstorming endpoint - Enhanced with multi-model support
 app.post('/v1/ai/llm-brainstorm', async (req, res) => {
   try {
-    const { prompt, sceneElements = [], selectedElements = [], chatHistory = [] } = req.body;
+    const { prompt, sceneElements = [], selectedElements = [], chatHistory = [], functionType = 'chat' } = req.body;
 
     if (!prompt) {
       return res.status(400).json({ error: 'Prompt is required' });
@@ -38,55 +63,61 @@ app.post('/v1/ai/llm-brainstorm', async (req, res) => {
       .map(msg => `${msg.role}: ${msg.content}`)
       .join('\n');
 
-    // Create system prompt for legal/brainstorming context
-    const systemPrompt = `You are an AI assistant helping with collaborative brainstorming and legal case preparation on a digital whiteboard called R2 Ditu. 
+    // Create context object for multi-model system
+    const context = {
+      whiteboard: {
+        elements: sceneElements,
+        selected: selectedElements,
+        summary: contextInfo
+      },
+      history: chatHistory,
+      prompt: prompt
+    };
 
-Current whiteboard context:
-${contextInfo}
-
-Recent conversation:
-${historyContext}
-
-Your role is to:
-1. Help organize thoughts and information visually
-2. Suggest new elements to add to the whiteboard
-3. Provide insights for legal case preparation (especially landlord-tenant matters)
-4. Help structure arguments and evidence
-5. Suggest modifications to existing elements
-
-When suggesting new elements, provide them in a structured format that can be added to the whiteboard.
-Focus on being helpful for legal case preparation and collaborative thinking.`;
-
-    // Call OpenAI API (with fallback for testing)
+    // Route request through multi-model system
     let aiResponse;
-    
-    if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.length > 50) {
-      try {
-        const completion = await openai.chat.completions.create({
-          model: "gpt-4",
-          messages: [
-            { role: "system", content: systemPrompt },
-            { role: "user", content: prompt }
-          ],
-          max_tokens: 1000,
-          temperature: 0.7,
-        });
-        aiResponse = completion.choices[0].message.content;
-      } catch (apiError) {
-        console.warn('OpenAI API error, using mock response:', apiError.message);
+    try {
+      const response = await modelAdapter.routeRequest(functionType, prompt, context);
+      aiResponse = response.content;
+      
+      // Log model used for debugging
+      console.log(`🤖 Response from ${response.model} (${response.provider})`);
+      
+    } catch (modelError) {
+      console.warn('Multi-model system error, using fallback:', modelError.message);
+      
+      // Fallback to original OpenAI logic
+      if (process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.length > 50) {
+        try {
+          const completion = await openai.chat.completions.create({
+            model: "gpt-4",
+            messages: [
+              { role: "system", content: await modelAdapter.loadPromptTemplate(functionType, context) },
+              { role: "user", content: prompt }
+            ],
+            max_tokens: 1000,
+            temperature: 0.7,
+          });
+          aiResponse = completion.choices[0].message.content;
+        } catch (apiError) {
+          console.warn('OpenAI API also failed, using mock response:', apiError.message);
+          aiResponse = generateMockResponse(prompt, contextInfo);
+        }
+      } else {
+        console.log('Using mock response (no valid API keys)');
         aiResponse = generateMockResponse(prompt, contextInfo);
       }
-    } else {
-      console.log('Using mock response (no valid OpenAI API key)');
-      aiResponse = generateMockResponse(prompt, contextInfo);
     }
 
-    // For now, return text response
-    // TODO: Parse AI response to extract suggested whiteboard elements
+    // Parse AI response for whiteboard elements (if applicable)
+    const parsedResponse = parseAIResponse(aiResponse, functionType);
+
     res.json({
       textResponse: aiResponse,
-      newElements: [], // TODO: Parse AI suggestions into whiteboard elements
-      modifiedElements: [], // TODO: Parse AI modifications to existing elements
+      newElements: parsedResponse.newElements || [],
+      modifiedElements: parsedResponse.modifiedElements || [],
+      suggestions: parsedResponse.suggestions || [],
+      functionType: functionType,
       success: true
     });
 
@@ -95,6 +126,87 @@ Focus on being helpful for legal case preparation and collaborative thinking.`;
     res.status(500).json({ 
       error: 'Failed to process AI request',
       details: error.message 
+    });
+  }
+});
+
+// New endpoint for task delegation to specialized agents
+app.post('/v1/ai/delegate-task', async (req, res) => {
+  try {
+    const { task, data, context = {} } = req.body;
+
+    if (!task) {
+      return res.status(400).json({ error: 'Task type is required' });
+    }
+
+    const taskId = await orchestrator.delegateTask(task, data, context);
+    
+    res.json({
+      taskId,
+      task,
+      status: 'delegated',
+      message: `Task ${task} has been delegated to specialized agent`,
+      success: true
+    });
+
+  } catch (error) {
+    console.error('Task delegation error:', error);
+    res.status(500).json({
+      error: 'Failed to delegate task',
+      details: error.message
+    });
+  }
+});
+
+// Endpoint for model health check
+app.get('/v1/ai/models/health', async (req, res) => {
+  try {
+    const healthStatus = await modelAdapter.healthCheck();
+    
+    res.json({
+      models: healthStatus,
+      timestamp: new Date().toISOString(),
+      success: true
+    });
+
+  } catch (error) {
+    console.error('Model health check error:', error);
+    res.status(500).json({
+      error: 'Failed to check model health',
+      details: error.message
+    });
+  }
+});
+
+// Endpoint to get available models and configuration
+app.get('/v1/ai/models/config', (req, res) => {
+  try {
+    const config = {
+      default_models: modelAdapter.config.default_models,
+      routing: modelAdapter.config.routing,
+      available_providers: Object.keys(modelAdapter.config.models).reduce((acc, modelId) => {
+        const model = modelAdapter.config.models[modelId];
+        if (!acc[model.provider]) acc[model.provider] = [];
+        acc[model.provider].push({
+          id: modelId,
+          model: model.model,
+          endpoint: model.endpoint
+        });
+        return acc;
+      }, {}),
+      orchestration: modelAdapter.config.orchestration
+    };
+
+    res.json({
+      config,
+      success: true
+    });
+
+  } catch (error) {
+    console.error('Config retrieval error:', error);
+    res.status(500).json({
+      error: 'Failed to retrieve configuration',
+      details: error.message
     });
   }
 });
@@ -192,9 +304,111 @@ function buildWhiteboardContext(sceneElements, selectedElements) {
   return context;
 }
 
-// Start server
-app.listen(port, '0.0.0.0', () => {
+// Helper function to parse AI response for whiteboard elements
+function parseAIResponse(response, functionType) {
+  const result = {
+    newElements: [],
+    modifiedElements: [],
+    suggestions: []
+  };
+
+  try {
+    // Look for JSON blocks in the response
+    const jsonMatches = response.match(/```json\n([\s\S]*?)\n```/g);
+    
+    if (jsonMatches) {
+      jsonMatches.forEach(match => {
+        try {
+          const jsonStr = match.replace(/```json\n/, '').replace(/\n```/, '');
+          const parsed = JSON.parse(jsonStr);
+          
+          if (parsed.elements) {
+            result.newElements.push(...parsed.elements);
+          }
+          if (parsed.suggestions) {
+            result.suggestions.push(...parsed.suggestions);
+          }
+        } catch (parseError) {
+          console.warn('Failed to parse JSON from AI response:', parseError.message);
+        }
+      });
+    }
+
+    // Extract suggestions from text
+    const suggestionPatterns = [
+      /I suggest (.*?)(?:\.|$)/gi,
+      /Consider (.*?)(?:\.|$)/gi,
+      /You might want to (.*?)(?:\.|$)/gi,
+      /Try (.*?)(?:\.|$)/gi
+    ];
+
+    suggestionPatterns.forEach(pattern => {
+      const matches = response.match(pattern);
+      if (matches) {
+        matches.forEach(match => {
+          result.suggestions.push({
+            type: 'text_suggestion',
+            content: match.trim()
+          });
+        });
+      }
+    });
+
+  } catch (error) {
+    console.warn('Error parsing AI response:', error.message);
+  }
+
+  return result;
+}
+
+// Initialize MCP client connection
+async function initializeMCPClient() {
+  try {
+    // Set up event handlers first
+    mcpClient.on('connected', () => {
+      console.log('🔗 AI collaborator joined the whiteboard session');
+    });
+    
+    mcpClient.on('disconnected', () => {
+      console.log('🔌 AI collaborator disconnected from whiteboard');
+    });
+    
+    mcpClient.on('whiteboard_updated', (state) => {
+      console.log('📝 Whiteboard state updated, AI analyzing changes...');
+    });
+    
+    // Attempt connection (non-blocking)
+    mcpClient.connect().catch(error => {
+      console.warn('⚠️  MCP Client connection failed:', error.message);
+      console.log('🔄 AI will operate in API-only mode');
+    });
+    
+  } catch (error) {
+    console.warn('⚠️  MCP Client initialization failed:', error.message);
+    console.log('🔄 AI will operate in API-only mode');
+  }
+}
+
+// Start server and initialize systems
+server.listen(port, '0.0.0.0', async () => {
   console.log(`🚀 R2 Ditu AI Backend running on port ${port}`);
-  console.log(`🔗 Health check: http://localhost:${port}/health`);
+  console.log(`📊 Health check: http://localhost:${port}/health`);
   console.log(`🤖 AI endpoint: http://localhost:${port}/v1/ai/llm-brainstorm`);
+  console.log(`🎯 Task delegation: http://localhost:${port}/v1/ai/delegate-task`);
+  console.log(`🏥 Model health: http://localhost:${port}/v1/ai/models/health`);
+  console.log(`⚙️  Model config: http://localhost:${port}/v1/ai/models/config`);
+  
+  // Initialize MCP client for real-time collaboration
+  await initializeMCPClient();
+  
+  console.log('\n🎉 Multi-Model AI System Ready!');
+  console.log('📋 Supported features:');
+  console.log('   • Local models (Ollama, LM Studio)');
+  console.log('   • Cloud models (OpenAI, Anthropic, Google, XAI)');
+  console.log('   • Multi-agent orchestration');
+  console.log('   • Real-time whiteboard collaboration');
+  console.log('   • Specialized task delegation');
+  console.log('   • Wireframe to code conversion');
+  console.log('   • Presentation animation');
+  console.log('   • Legal document analysis');
 });
