@@ -48,7 +48,13 @@ The R2 Ditu editor supports:
 - ➡️&nbsp;Arrow-binding & labeled arrows.
 - 🔙&nbsp;Undo / Redo.
 - 🔍&nbsp;Zoom and panning support.
-- 🤖&nbsp;AI Assistant for brainstorming (New!).
+- 🤖&nbsp;**Multi-Model AI System** - Local & cloud AI collaboration.
+- 🎯&nbsp;**Specialized AI Agents** - Code, design, legal, animation experts.
+- 🔗&nbsp;**Real-time AI Collaboration** - AI as whiteboard participant.
+- ⚖️&nbsp;**Legal Case Preparation** - Landlord-tenant hearing assistance.
+- 💻&nbsp;**Wireframe to Code** - Convert designs to production code.
+- 🎬&nbsp;**Presentation Animation** - Automated slide transitions.
+- 🎨&nbsp;**AI Design Assistant** - Layout optimization and styling.
 
 ## R2 Ditu App
 
@@ -63,15 +69,113 @@ The hosted R2 Ditu app showcases the full capabilities of the whiteboard editor.
 
 We'll be adding these features as drop-in plugins for the npm package in the future.
 
-### AI Assistant for Brainstorming
+### 🤖 Advanced AI Collaboration System
 
-R2 Ditu includes an AI Assistant to help you brainstorm ideas, generate diagrams from text, and get suggestions for your drawings. Access it via the "AI Assistant" option in the main menu. This feature allows you to:
+R2 Ditu features a sophisticated multi-model AI system that transforms your whiteboard into an intelligent collaborative workspace. The AI can participate as a team member, providing specialized assistance across different domains.
 
--   **Generate diagrams:** Describe what you want to draw, and the AI will attempt to create it.
--   **Get suggestions:** Select elements on your canvas and ask the AI for improvements or related ideas.
--   **Collaborate with AI:** Work alongside the AI agent in real-time collaborative sessions.
+#### Multi-Model Support
+- **Local Models**: Ollama (DeepSeek R1, Qwen, Codestral), LM Studio
+- **Cloud Models**: OpenAI GPT-4, Anthropic Claude, Google Gemini, XAI Grok
+- **Automatic Routing**: Different AI models for different tasks (legal, visual, coding)
+- **Graceful Fallbacks**: Seamless switching when models are unavailable
 
-This feature requires a backend service. For local development, ensure the AI backend is running (see development documentation for details).
+#### AI Collaboration Modes
+
+**🎯 API Mode** - Traditional request/response interaction
+- Chat with AI about your whiteboard content
+- Get suggestions and improvements
+- Generate new elements based on descriptions
+
+**🔗 MCP Mode** - Real-time collaborative AI participant
+- AI joins your whiteboard session like another human
+- Creates and modifies elements in real-time
+- Provides contextual suggestions as you work
+
+**🤝 Multi-Agent Orchestration** - Specialized AI agents for different tasks
+- **Primary Agent**: Main conversational AI for general assistance
+- **Coder Agent**: Converts wireframes to production code
+- **Animator Agent**: Creates presentation animations and transitions
+- **Designer Agent**: Optimizes visual layouts and color schemes
+- **Analyst Agent**: Specialized for legal document analysis
+- **Copilot Agent**: Background assistant providing continuous suggestions
+
+#### Specialized Capabilities
+
+**⚖️ Legal Case Preparation**
+- Organize landlord-tenant cases and evidence
+- Structure legal arguments and timelines
+- Analyze documents and identify key issues
+- Prepare for hearings with AI guidance
+
+**💻 Wireframe to Code Conversion**
+- Convert UI mockups to React/Vue/Angular code
+- Generate production-ready components with styling
+- Support for Tailwind CSS, Bootstrap, and custom styles
+- Responsive design and accessibility features
+
+**🎬 Presentation Animation**
+- Create smooth slide transitions
+- Animate element sequences
+- Generate interactive presentations
+- Export animation timelines
+
+**🎨 Visual Design Assistance**
+- Optimize layouts and color schemes
+- Suggest visual improvements
+- Generate design systems
+- Create consistent styling
+
+#### Configuration & Setup
+
+The AI system is highly configurable through [`ai-backend/config/models.yaml`](./ai-backend/config/models.yaml):
+
+```yaml
+# Route different functions to optimal models
+default_models:
+  primary: "local_deepseek"      # Main conversation
+  legal: "openai_gpt4"          # Legal analysis
+  visual: "local_qwen"          # Visual generation
+  code: "local_devstral"        # Code generation
+```
+
+For detailed setup instructions, see the [AI Backend Documentation](./ai-backend/README.md).
+
+#### API Endpoints
+
+The AI backend provides several endpoints for different interaction modes:
+
+- `POST /v1/ai/llm-brainstorm` - Main AI chat with function routing
+- `POST /v1/ai/delegate-task` - Delegate specialized tasks to AI agents
+- `GET /v1/ai/models/health` - Check model availability and status
+- `GET /v1/ai/models/config` - View current model configuration
+
+#### Example Usage
+
+**Basic AI Chat:**
+```javascript
+const response = await fetch('/v1/ai/llm-brainstorm', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    prompt: "Help me organize a legal case",
+    functionType: "legal",
+    sceneElements: [...],
+    chatHistory: [...]
+  })
+});
+```
+
+**Task Delegation:**
+```javascript
+const taskResponse = await fetch('/v1/ai/delegate-task', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+    task: "wireframe_to_code",
+    data: { elements: [...], framework: "react" }
+  })
+});
+```
 
 ## Quick Start
 
@@ -106,10 +210,37 @@ Check out our documentation for more details!
 
 To run R2 Ditu locally for development:
 
+### Frontend Setup
 1. Clone this repository
 2. Install dependencies: `yarn install`
 3. Start the development server: `yarn start`
 4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+### AI Backend Setup (Optional but Recommended)
+1. Navigate to AI backend: `cd ai-backend`
+2. Install dependencies: `npm install`
+3. Configure models in [`config/models.yaml`](./ai-backend/config/models.yaml)
+4. Start the AI backend: `npm start`
+5. AI backend runs on [http://localhost:3015](http://localhost:3015)
+
+### Local AI Models (Optional)
+For privacy and offline use, install local AI models:
+
+**Ollama Setup:**
+```bash
+# Install Ollama
+curl -fsSL https://ollama.ai/install.sh | sh
+
+# Pull recommended models
+ollama pull deepseek-r1:latest    # Primary conversation
+ollama pull qwen2.5:latest        # Visual generation
+ollama pull codestral:latest      # Code generation
+```
+
+**LM Studio Setup:**
+1. Download [LM Studio](https://lmstudio.ai/)
+2. Load your preferred models
+3. Start local server on port 1234
 
 For more detailed development instructions, see the [Development Guide](./dev-docs/README.md).
 

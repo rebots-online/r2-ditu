@@ -1,0 +1,192 @@
+# R2 Ditu Multi-Model Configuration
+# Supports OpenAI, Anthropic, Google, XAI, Ollama, LM Studio, and custom endpoints
+
+# Default model assignments
+default_models:
+  primary: "local_deepseek"      # Main conversational AI
+  visual: "local_qwen"           # Visual element generation
+  legal: "openai_gpt4"          # Legal analysis and reasoning
+  document: "local_devstral"     # Document processing
+  copilot: "local_qwen_small"    # Background sidecar assistant
+
+# Model definitions
+models:
+  # Local Ollama Models
+  local_deepseek:
+    provider: "ollama"
+    model: "deepseek-r1:latest"
+    endpoint: "http://localhost:11434"
+    api_key: null
+    temperature: 0.7
+    max_tokens: 2000
+    timeout: 30
+    
+  local_qwen:
+    provider: "ollama"
+    model: "qwen2.5:latest"
+    endpoint: "http://localhost:11434"
+    api_key: null
+    temperature: 0.5
+    max_tokens: 1500
+    timeout: 25
+    
+  local_devstral:
+    provider: "ollama"
+    model: "codestral:latest"
+    endpoint: "http://localhost:11434"
+    api_key: null
+    temperature: 0.3
+    max_tokens: 4000
+    timeout: 45
+    
+  local_qwen_small:
+    provider: "ollama"
+    model: "qwen2.5:7b"
+    endpoint: "http://localhost:11434"
+    api_key: null
+    temperature: 0.8
+    max_tokens: 1000
+    timeout: 15
+
+  # LM Studio Models
+  lmstudio_primary:
+    provider: "lmstudio"
+    model: "local-model"
+    endpoint: "http://localhost:1234"
+    api_key: null
+    temperature: 0.7
+    max_tokens: 2000
+    timeout: 30
+    
+  lmstudio_coder:
+    provider: "lmstudio"
+    model: "qwen2.5-coder"
+    endpoint: "http://localhost:1234"
+    api_key: null
+    temperature: 0.3
+    max_tokens: 3000
+    timeout: 40
+
+  # OpenAI Models
+  openai_gpt4:
+    provider: "openai"
+    model: "gpt-4"
+    endpoint: "https://api.openai.com/v1"
+    api_key: "${OPENAI_API_KEY}"
+    temperature: 0.7
+    max_tokens: 2000
+    timeout: 30
+    
+  openai_gpt4_turbo:
+    provider: "openai"
+    model: "gpt-4-turbo-preview"
+    endpoint: "https://api.openai.com/v1"
+    api_key: "${OPENAI_API_KEY}"
+    temperature: 0.7
+    max_tokens: 4000
+    timeout: 45
+
+  # Anthropic Models
+  claude_sonnet:
+    provider: "anthropic"
+    model: "claude-3-sonnet-20240229"
+    endpoint: "https://api.anthropic.com"
+    api_key: "${ANTHROPIC_API_KEY}"
+    temperature: 0.7
+    max_tokens: 2000
+    timeout: 30
+    
+  claude_haiku:
+    provider: "anthropic"
+    model: "claude-3-haiku-20240307"
+    endpoint: "https://api.anthropic.com"
+    api_key: "${ANTHROPIC_API_KEY}"
+    temperature: 0.8
+    max_tokens: 1500
+    timeout: 20
+
+  # Google Models
+  gemini_pro:
+    provider: "google"
+    model: "gemini-pro"
+    endpoint: "https://generativelanguage.googleapis.com"
+    api_key: "${GOOGLE_API_KEY}"
+    temperature: 0.7
+    max_tokens: 2000
+    timeout: 30
+
+  # XAI Models
+  grok_beta:
+    provider: "xai"
+    model: "grok-beta"
+    endpoint: "https://api.x.ai"
+    api_key: "${XAI_API_KEY}"
+    temperature: 0.7
+    max_tokens: 2000
+    timeout: 30
+
+# Function-specific model routing
+routing:
+  # Main chat interface
+  chat:
+    primary: "local_deepseek"
+    fallback: ["local_qwen", "openai_gpt4"]
+    
+  # Legal analysis and case preparation
+  legal:
+    primary: "openai_gpt4"
+    fallback: ["claude_sonnet", "local_deepseek"]
+    
+  # Visual element generation
+  visual:
+    primary: "local_qwen"
+    fallback: ["lmstudio_coder", "openai_gpt4"]
+    
+  # Document processing and analysis
+  document:
+    primary: "local_devstral"
+    fallback: ["claude_sonnet", "openai_gpt4_turbo"]
+    
+  # Background copilot suggestions
+  copilot:
+    primary: "local_qwen_small"
+    fallback: ["claude_haiku", "local_qwen"]
+    
+  # Code generation and structured output
+  code:
+    primary: "local_devstral"
+    fallback: ["lmstudio_coder", "openai_gpt4"]
+
+# Prompt templates for different functions
+prompt_templates:
+  legal_analysis: "prompts/legal-analysis.txt"
+  visual_generation: "prompts/visual-generation.txt"
+  document_processing: "prompts/document-processing.txt"
+  brainstorming: "prompts/brainstorming.txt"
+  copilot_suggestions: "prompts/copilot-suggestions.txt"
+  code_generation: "prompts/code-generation.txt"
+
+# Multi-model orchestration settings
+orchestration:
+  # Enable parallel processing for multiple models
+  parallel_processing: true
+  
+  # Maximum concurrent model requests
+  max_concurrent: 3
+  
+  # Enable model consensus for critical decisions
+  consensus_mode: false
+  consensus_threshold: 0.7
+  
+  # Sidecar copilot settings
+  copilot:
+    enabled: true
+    auto_suggest: true
+    suggestion_interval: 30  # seconds
+    context_window: 5        # messages
+    
+  # Cross-model validation
+  validation:
+    enabled: false
+    critical_functions: ["legal", "document"]
+    validator_model: "openai_gpt4"
