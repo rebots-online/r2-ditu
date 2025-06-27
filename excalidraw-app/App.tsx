@@ -70,6 +70,7 @@ import type {
   BinaryFiles,
   ExcalidrawInitialDataState,
   UIAppState,
+  ExcalidrawAPIRefValue, // Added for WebSocket integration
 } from "@excalidraw/excalidraw/types";
 import type { ResolutionType } from "@excalidraw/common/utility-types";
 import type { ResolvablePromise } from "@excalidraw/common/utils";
@@ -339,6 +340,8 @@ const ExcalidrawWrapper = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const isCollabDisabled = isRunningInIframe();
 
+  const ws = useRef<WebSocket | null>(null); // Added for WebSocket
+
   const { editorTheme, appTheme, setAppTheme } = useHandleAppTheme();
 
   const [langCode, setLangCode] = useAppLangCode();
@@ -365,7 +368,80 @@ const ExcalidrawWrapper = () => {
   }, []);
 
   const [excalidrawAPI, excalidrawRefCallback] =
-    useCallbackRefState<ExcalidrawImperativeAPI>();
+    useCallbackRefState<ExcalidrawImperativeAPI>(); // This is correct for getting the API
+
+const excalidrawRef = useRef<ExcalidrawAPIRefValue>(null); // Ref for Excalidraw component to get API
+
+useEffect(() => {
+  // Assign the API to excalidrawAPI once the ref is populated
+  // This ensures excalidrawAPI is available for WebSocket messages
+  if (excalidrawRef.current?.getSceneElements && excalidrawAPI) {
+     // console.log("Excalidraw API is ready via excalidrawAPI state variable");
+  }
+}, [excalidrawAPI]);
+
+
+// WebSocket connection logic
+useEffect(() => {
+  // Ensure this runs only once or if dependencies change (e.g. server URL)
+  // For this POC, the URL is static.
+  const socket = new WebSocket("ws://localhost:8080");
+  ws.current = socket;
+
+  socket.onopen = () => {
+    console.log("WebSocket connection established");
+    // Kick-start with an empty canvas
+    if (socket.readyState === WebSocket.OPEN) {
+      socket.send(
+        JSON.stringify({
+          jsonrpc: "2.0",
+          method: "sceneUpdate",
+          params: { elements: [], appState: getDefaultAppState() }, // Send default app state
+        }),
+      );
+    }
+  };
+
+  socket.onmessage = (event) => {
+    try {
+      const data = event.data;
+      // Check if data is a string before parsing
+      if (typeof data === 'string') {
+        const msg = JSON.parse(data);
+        if (msg.jsonrpc === "2.0" && msg.method === "sceneUpdate") {
+          // console.log("Received sceneUpdate from server:", msg.params);
+          if (excalidrawAPI) { // Use the state variable directly
+            excalidrawAPI.updateScene(msg.params);
+          } else {
+            console.warn("Excalidraw API not available when message received.");
+          }
+        }
+      } else {
+        console.warn("Received non-string WebSocket message:", data);
+      }
+    } catch (error) {
+      console.error("Error processing message from server:", error);
+    }
+  };
+
+  socket.onclose = () => {
+    console.log("WebSocket connection closed");
+  };
+
+  socket.onerror = (error) => {
+    console.error("WebSocket error:", error);
+  };
+
+  return () => {
+    console.log("Closing WebSocket connection");
+    socket.close();
+    ws.current = null;
+  };
+  // excalidrawAPI should be a dependency if used inside onmessage for setup,
+  // but here we rely on it being stable or the latest instance.
+  // For onmessage, it's better to access the API via the state variable `excalidrawAPI`
+  // which is updated by `useCallbackRefState`.
+}, [excalidrawAPI]); // Add excalidrawAPI to dependencies
 
   const [, setShareDialogState] = useAtom(shareDialogStateAtom);
   const [collabAPI] = useAtom(collabAPIAtom);
@@ -629,6 +705,19 @@ const ExcalidrawWrapper = () => {
     appState: AppState,
     files: BinaryFiles,
   ) => {
+    // Send updates over WebSocket
+    if (ws.current && ws.current.readyState === WebSocket.OPEN) {
+      // console.log("Sending sceneUpdate to server:", { elements, appState });
+      ws.current.send(
+        JSON.stringify({
+          jsonrpc: "2.0",
+          method: "sceneUpdate",
+          params: { elements, appState },
+        }),
+      );
+    }
+
+    // Existing collaboration logic
     if (collabAPI?.isCollaborating()) {
       collabAPI.syncElements(elements);
     }
@@ -640,7 +729,7 @@ const ExcalidrawWrapper = () => {
         if (excalidrawAPI) {
           let didChange = false;
 
-          const elements = excalidrawAPI
+          const elementsFromAPI = excalidrawAPI // Renamed to avoid conflict
             .getSceneElementsIncludingDeleted()
             .map((element) => {
               if (
@@ -657,7 +746,7 @@ const ExcalidrawWrapper = () => {
 
           if (didChange) {
             excalidrawAPI.updateScene({
-              elements,
+              elements: elementsFromAPI, // Use renamed variable
               captureUpdate: CaptureUpdateAction.NEVER,
             });
           }
@@ -806,7 +895,8 @@ const ExcalidrawWrapper = () => {
       })}
     >
       <Excalidraw
-        excalidrawAPI={excalidrawRefCallback}
+        ref={excalidrawRef} // Added ref here
+        excalidrawAPI={excalidrawRefCallback} // This sets the excalidrawAPI state
         onChange={onChange}
         initialData={initialStatePromiseRef.current.promise}
         isCollaborating={isCollaborating}
